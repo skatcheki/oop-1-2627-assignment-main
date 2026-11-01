@@ -249,6 +249,16 @@ class SmartHomeTest {
     }
 
     @Test
+    void getByIdSkipsDeviceWhoseIdWasClearedAfterAdding() throws Exception {
+        home.addRoom(new Room("Kitchen"));
+        Device lamp = new LightDevice("Lamp", 60);
+        home.addDeviceToRoom("Kitchen", lamp);
+        lamp.setId(null);
+
+        assertThrows(DeviceNotFoundException.class, () -> home.getById(1));
+    }
+
+    @Test
     void getByIdWorksForIdsAbove127() throws Exception {
         home.addRoom(new Room("Kitchen"));
         for (int i = 0; i < 200; i++) {
