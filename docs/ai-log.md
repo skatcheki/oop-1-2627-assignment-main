@@ -14,5 +14,4 @@ tasks from `docs/plan.md`. After every task I reviewed the result, and committed
 | 2026-11-01 | 7 | Final pass. | Mockito agent configured in `pom.xml`; coverage checked (100% of all tested classes after one extra test for a missed branch); `mvn javadoc:javadoc` clean; README written. | JaCoCo showed one uncovered branch in `SmartHome#getById` (device whose id is cleared after adding); added a test instead of removing the guard. |
 
 ## What I learned about working with AI
-_Fill in yourself (a few sentences): what worked well, where you had to check or correct the AI,
-and what you would do differently next time._
+I have learned that working with AI help is giving me a free breathe on the code side. That means that all that are covered with coding "SmartHome" AI doing great. Still the human eye need when the AI working, in the naming.
