@@ -12,7 +12,7 @@ Test references are filled in when the test is written (`Class#method`).
 | D-05 | Are room names case-sensitive? | Comparison is case-insensitive and ignores surrounding whitespace; stored name keeps the user's spelling (trimmed). | "Kitchen" and "kitchen" being two rooms would confuse a console user. | `SmartHomeTest#addRoomRejectsDuplicateNameIgnoringCase`, `#removeRoomFindsNameIgnoringCaseAndWhitespace`, `#addDeviceToRoomUsesRoomNameIgnoringCase` |
 | D-06 | Can ids be reused after the device with the highest id is removed? | Yes, the rule is applied literally ("highest *existing* id + 1"). | The specification defines the algorithm explicitly; storing a counter would contradict it. | `SmartHomeTest#idOfRemovedHighestDeviceIsReused` |
 | D-07 | Can the same `Device` instance be added twice (same or other room)? | No → `IllegalArgumentException`. `null` device → `IllegalArgumentException`. | Adding it again would give the single object a new id and make it appear twice. | `SmartHomeTest#addSameDeviceTwiceThrows`, `#addNullDeviceThrows` |
-| D-08 | `findDevicesWithPowerUsageLessThan(max)`: strict or inclusive? | Strict (`<`). Negative or `NaN` max simply gives an empty list. | The name says "less than". | _TBD_ |
+| D-08 | `findDevicesWithPowerUsageLessThan(max)`: strict or inclusive? | Strict (`<`). Negative or `NaN` max simply gives an empty list. | The name says "less than". | `SmartHomeServiceImplTest#findDevicesWithPowerUsageLessThanUsesStrictLessThan`, `#findDevicesWithNegativeOrNaNMaxSelectsNothing` |
 | D-09 | How does the UI read numbers? | Read full lines and parse with `Integer.parseInt`/`Double.parseDouble` inside try/catch. | Avoids the classic `nextInt()`/`nextLine()` problems and `InputMismatchException` crashes. | manual (UI not unit-tested) |
 | D-10 | Thermostat range format details? | `"<min>-<max>"`, `.` as decimal separator, whitespace around numbers allowed (`" 16 - 24 "`). Comma decimals, missing part, extra `-`, text → `IllegalArgumentException`. | Spec gives `"16-24"` and `"16.5-23.5"`; negative values are impossible because of the 5–30 bound, so splitting on `-` is unambiguous. | `ThermostatDeviceTest#constructorParsesValidRange`, `#constructorRejectsInvalidRange` |
 | D-11 | Is the target temperature range inclusive? | Yes, `min <= target <= max`. | A new thermostat's target is `min`, so `min` must be valid; symmetric for `max`. | `ThermostatDeviceTest#setTargetTemperatureAcceptsValueInRange`, `#setTargetTemperatureRejectsValueOutsideRangeAndKeepsOldTarget` |
@@ -31,7 +31,23 @@ Test references are filled in when the test is written (`Class#method`).
 | D-24 | Validation of the room name in `Room`? | `null`/blank → `IllegalArgumentException`; name is trimmed. | Same rule as device names. | `RoomTest#constructorRejectsNullOrBlankName`, `#constructorTrimsName` |
 
 ## Lambda vs anonymous class
-_To be written in task 5 (where the anonymous `Selector` is implemented)._
+**Where:** `SmartHomeServiceImpl#findDevicesWithPowerUsageLessThan` uses an anonymous class
+`new Selector<Device>() { ... }`. Lambdas and method references are used everywhere else
+(`SmartHome#find`, `#findByType`, `#sortedByPowerUsage`, `#totalPowerUsage`, `HomeStats`,
+`Room#removeDevice`), and in the tests (`home.find(device -> device.getPowerUsage() > 10)`).
+
+**When I choose a lambda:** the interface is functional (one abstract method), the behaviour is
+short and has no state of its own. A lambda is shorter and keeps the focus on *what* is selected.
+For `Selector` this is almost always the best choice, so a lambda would also work in the service.
+
+**When I choose an anonymous class:**
+- the interface has more than one abstract method, or it is an abstract class (a lambda is impossible);
+- the object needs its own fields (state), e.g. a selector that counts how many devices it checked;
+- I need `this` to refer to the selector object itself (in a lambda `this` is the enclosing object);
+- the implementation is longer and I want to add helper methods or override `toString()`.
+
+The anonymous class in the service is kept because the assignment requires one; it also shows that
+both forms capture the effectively-final parameter `max` in the same way.
 
 ## Extra public methods
 None so far.
