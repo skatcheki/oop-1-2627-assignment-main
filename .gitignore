@@ -1,0 +1,62 @@
+# Java
+*.class
+*.log
+*.tmp
+*.bak
+
+# Build directories
+/target/
+/build/
+/out/
+/bin/
+
+# Maven
+/.mvn/
+!/mvnw
+!/mvnw.cmd
+
+# Gradle
+/.gradle/
+/gradle-app.setting
+.gradle/
+/gradle/
+
+# Generated jars, wars, ears
+*.jar
+*.war
+*.ear
+
+# IDEs
+# IntelliJ
+/.idea/
+/*.iml
+*.iws
+/out/
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+
+# VS Code
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs, reports, temp
+hs_err_pid*
+coverage/
+*.coverage
+*.log
+
+# Local environment / sensitive
+local.properties
+.env
