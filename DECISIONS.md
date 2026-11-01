@@ -29,6 +29,8 @@ Test references are filled in when the test is written (`Class#method`).
 | D-22 | UML has `setTargetTemperature` but the menu has no option for it. | Option 4 asks for an optional target temperature after the thermostat is added (empty = keep minimum). | Uses the required API without changing the given menu. | manual |
 | D-23 | `getDevicesSortedByPowerUsage()` has no menu option. | Option 6 shows its result sorted (highest first); the sort is done by `SmartHome`, not in the UI. | Uses the required API without changing the given menu. | manual |
 | D-24 | Validation of the room name in `Room`? | `null`/blank → `IllegalArgumentException`; name is trimmed. | Same rule as device names. | `RoomTest#constructorRejectsNullOrBlankName`, `#constructorTrimsName` |
+| D-25 | What happens when the input ends (Ctrl+Z/Ctrl+D, piped input), also in the middle of an action? | The UI stops cleanly with `Goodbye!` instead of throwing `NoSuchElementException` or looping forever. | "The UI must never crash". | manual (pipe only "3" and "Kitchen" into the app) |
+| D-26 | `describe()` does not contain the power usage, but options 1, 2 and 6 are about devices and their usage. | The UI prints `describe()` followed by `power: 60.00 W`; numbers are formatted with `Locale.ROOT` (always a decimal point). `describe()` itself stays exactly as specified. | The user needs to see the usage to understand option 6; the business format must not change. | manual |
 
 ## Lambda vs anonymous class
 **Where:** `SmartHomeServiceImpl#findDevicesWithPowerUsageLessThan` uses an anonymous class
