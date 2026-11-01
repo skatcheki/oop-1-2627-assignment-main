@@ -21,14 +21,14 @@ Test references are filled in when the test is written (`Class#method`).
 | D-14 | Exact `describe()` format of a thermostat? | `\| id: 1 \|\| name: Hall \|\| type: Thermostat \|\| range: 16.0-24.0 \|\| target: 16.0 \|` | "Same style" as `Device.describe()`; default `double` text is locale independent. | `ThermostatDeviceTest#describeAddsRangeAndTarget` |
 | D-15 | What does `describe()` show for a device without id? Is `setId` validated? | `id: null`; `setId` accepts any value (also `null`). | The spec explicitly says new devices have id `null`; `SmartHome` is the only place that assigns ids. | `DeviceTest#describeWithoutIdShowsNull`, `#setIdChangesIdAndAcceptsNull` |
 | D-16 | Tie-break for equal power usage: case-sensitive? | Case-insensitive name order. | Users expect `"lamp"` and `"Lamp"` to sort together, not all capitals first. | _TBD_ |
-| D-17 | `Room.addDevice(null)`? | `IllegalArgumentException` | Fail fast; a `null` in the list would break every stream. | _TBD_ |
+| D-17 | `Room.addDevice(null)`? | `IllegalArgumentException` | Fail fast; a `null` in the list would break every stream. | `RoomTest#addDeviceRejectsNull` |
 | D-18 | `findByType(null)`? Subclasses? | `NullPointerException` (same as `find`); matches via `isInstance`, so `findByType(Device.class)` returns all devices. | Consistent with `find`; `isInstance` is the polymorphic choice. | _TBD_ |
 | D-19 | Is `SmartHome.getRooms()` modifiable? | No, unmodifiable view. | Same reasoning as `Room.getDevices()`: rooms must be added through `addRoom` so the rules are enforced. | _TBD_ |
 | D-20 | Order of rooms and devices in listings? | Insertion order (`ArrayList`). | Predictable output for the user and tests. | _TBD_ |
 | D-21 | Key order of `getCountByType()`? | Alphabetical (`TreeMap`), map unmodifiable. | Deterministic output in the UI and tests. | _TBD_ |
 | D-22 | UML has `setTargetTemperature` but the menu has no option for it. | Option 4 asks for an optional target temperature after the thermostat is added (empty = keep minimum). | Uses the required API without changing the given menu. | manual |
 | D-23 | `getDevicesSortedByPowerUsage()` has no menu option. | Option 6 shows its result sorted (highest first); the sort is done by `SmartHome`, not in the UI. | Uses the required API without changing the given menu. | manual |
-| D-24 | Validation of the room name in `Room`? | `null`/blank → `IllegalArgumentException`; name is trimmed. | Same rule as device names. | _TBD_ |
+| D-24 | Validation of the room name in `Room`? | `null`/blank → `IllegalArgumentException`; name is trimmed. | Same rule as device names. | `RoomTest#constructorRejectsNullOrBlankName`, `#constructorTrimsName` |
 
 ## Lambda vs anonymous class
 _To be written in task 5 (where the anonymous `Selector` is implemented)._
